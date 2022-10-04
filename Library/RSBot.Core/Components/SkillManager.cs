@@ -118,8 +118,14 @@ namespace RSBot.Core.Components
 
             if (entity is SpawnedMonster monster)
             {
-                if (Skills[monster.Rarity].Count > 0)
-                    rarity = monster.Rarity;
+                for( var i = monster.Rarity; i > MonsterRarity.General; i-- ) 
+                {
+                    if( Skills.TryGetValue( i, out var s ) && s.Count > 0 ) 
+                    {
+                        rarity = i;
+                        break;
+                    }
+                }
             }
 
             var distance = Game.Player.Movement.Source.DistanceTo(entity.Movement.Source);
