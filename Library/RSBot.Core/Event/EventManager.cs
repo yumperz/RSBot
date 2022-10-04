@@ -49,7 +49,17 @@ namespace RSBot.Core.Event
                 foreach (var target in targets)
                     if (Thread.CurrentThread.Name == "Proxy.Network.Server.PacketProcessor" ||
                         Thread.CurrentThread.Name == "Proxy.Network.Client.PacketProcessor")
-                        Task.Run(() => target.DynamicInvoke(parameters));
+                        Task.Run(() => 
+                        {
+                            try 
+                            {
+                                target.DynamicInvoke( parameters );
+                            } 
+                            catch (Exception e)
+                            {
+                                Log.Fatal(e);
+                            }
+                        } );
                     else
                         target.DynamicInvoke(parameters);
             }
